@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="https://lina.mrlwitwma.in/lina.svg" type="image/x-icon">
+    <title>Lina(AI)</title>
+
+    <style type="text/css">
+
+	body {
+    transition: background-color 0.3s, color 0.3s;
+	position:relative;
+	margin:0;
+	padding:0;
+	font-size: 17px;
+	color: black;
+    }
+	.light-mode{
+	background-color:#ffffff;
+	}
+	.dark-mode {
+    background-color: #252525;
+	color: white;
+    }
+	
+	header{
+    transition: background-color 0.3s, color 0.3s;
+	position:fixed; 
+	display:grid;
+	place-items:center;
+	width:100%;
+	height:65px;
+	top:0px;
+	left:0px;
+	font-weight:bold;
+	font-size:35px;
+	}
+	.dark-header{
+	background-color:#333;
+	border-bottom:1px solid white;
+	}
+	.light-header{
+	border-bottom:1px solid white;
+	background-color:#b1b1b1; 
+	}
+	.more-container{
+		width:100%;
+	}
+	.more{
+		margin-left: 10px;
+		height: 16px;
+    	width: 16px;
+    	display: flex;
+		flex-direction: column;
+	    justify-content: space-between;
+    	cursor: pointer;
+		z-index: 1;
+	}
+	.more span{
+    	width: 18px;
+    	height: 2px;
+    	background-color: #f1f1f1;
+	}
+	header b{
+		text-align: center;
+		width: 100%;
+		position: absolute;
+		z-index: -1;
+	}
+	
+	footer{
+	display:flex;
+	justify-content:center; 
+	align-items:center; 
+	position: fixed;
+	border-top:1px solid white;
+	bottom: 0;
+	height:65px;
+	width: 100%;
+	right:0px;
+	left:0px;
+	background-color: #333;
+	}
+	.light-footer{
+		background-color: #f1f1f1;
+	}
+	.dark-footer{
+		background-color: #333;
+	}
+	
+	input{
+	border: 1px solid #ccc;
+	width:65%;
+	padding:10px;
+	margin:0px -2px;
+	}
+	
+	button{
+	width:15%;
+	padding:10px;
+	margin:5px 2%;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	cursor: pointer;
+	}
+	
+	.chat-container {
+	display: flex;
+	flex-direction: column;
+	min-height: calc(100vh - 60px); /* Adjusted to account for header height */
+	max-height: calc(100vh - 60px); /* Adjusted to account for header height */
+	overflow: auto;
+	margin-bottom:0px;
+	margin-top:-8px; /*-10*/
+	}
+	
+	.chat-display {
+	flex: 1;
+	padding: 20px;
+	overflow-y: auto;
+	margin-top:60px;
+	margin-bottom:10px; /*60px*/
+    word-wrap: break-word;
+	}
+
+    .chat-display::-webkit-scrollbar {
+    width: 6px; /* Adjust the width as needed */
+    }
+
+    .chat-display::-webkit-scrollbar-thumb {
+    background-color: transparent; /* Make the thumb (the draggable part) transparent */
+    }
+	
+	.watermark {
+	font-size: 100px;
+	font-weight: bold;
+	color: rgba(255, 255, 255, 0.3); /* Adjust the color and opacity as needed */
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: -1; /* Place the watermark behind other elements */
+	user-select: none; /* Prevent text from being selected */
+	opacity:20%;
+	}
+	
+	a{
+		color:#353535;
+		font-weight:bold;
+	}
+
+	.start{
+        min-height:200px;
+        min-width:350px;
+        border-radius:10px;
+        background-color: rgb(86, 92, 211);
+        top: 70px; /* Adjust the top position to place it below the header */
+        right: 10px;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    p{
+        margin:10px 10px;
+        font-weight: bold;
+        color:rgb(255, 255, 255);
+        word-wrap: break-word;
+        opacity:100%;
+    }
+    .mini-detail{
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+        width:100%;
+    }
+    ul, li{
+        color:white;
+    }
+	
+	.user-request-container{
+        display: flex;
+        justify-content: end;
+        width: 100%;
+        z-index: -10;
+    }
+    .user-request{
+        margin: 10px;
+        padding:15px;
+		width: 40%;
+        border-radius: 20px;
+        background-color: rgb(165, 55, 255);
+    }
+    .ai{
+        margin: 10px;
+        padding:15px;
+        max-width: 40%;
+        border-radius: 20px;
+        background-color: rgb(210, 155, 255);
+    }
+
+
+	/* Add styles for the pop-up container */
+.popup-container {
+  position: fixed;
+  top: 0;
+  right: -300px; /* Initial position is outside the viewport */
+  width: 300px;
+  height: 100%;
+  background-color: #b0b0b0;
+  transition: left 0.5s ease-in-out; /* Add smooth transition for sliding effect */
+  z-index: 1000; /* Ensure it's above other elements */
+  overflow: hidden;
+  border-right: 1px solid black ;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.popup-container button{
+  display: block;
+  width: 90%;
+  height: 40px;
+  padding: 10px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 15px;
+  margin-top: 15px;
+  z-index: 1000;
+}
+.popup-container button:hover{
+	background-color: #333333b0;
+}
+.button-container {
+	height: 70%;
+ 	width: 100%;
+}
+
+.settings-popup {
+ 	right: -300px;
+ 	width: 300px;
+ 	background: transparent;
+ 	z-index: 900;
+ 	overflow: hidden;
+ 	display: flex;
+ 	flex-direction: column;
+ 	align-items: center;
+ 	justify-content: flex-end;
+}
+.last-btn{
+	margin-bottom: 170px;
+}
+/* Add styles for the "Settings" button */
+#settings {
+  	cursor: pointer;
+}
+
+
+
+	/* Hide a navigation menu on smaller screens */
+	@media (max-width: 500px) {
+		.chat-display{
+			margin-bottom:40px;
+		}
+		.start{
+       		min-height:200px;
+       		min-width:100px;
+    	}
+		p, a, ul, li{
+			font-size:14px;
+		}
+		.user-request{
+			min-width: 70%;
+			font-size: 14px;
+        }
+		.ai{
+			max-width: 70%;
+			font-size: 14px;
+		}
+	}
+	</style>
+	
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			const chatDisplay = document.getElementById('chat-display');
+			const userInput = document.getElementById('user-input');
+			const sendButton = document.getElementById('send-btn');
+	
+			sendButton.addEventListener('click', sendMessage);
+	
+			userInput.addEventListener('keydown', (event) => {
+				if (event.key === 'Enter') {
+					sendMessage();
+					event.preventDefault(); // Prevent the default form submission behavior
+				}
+			});
+	
+			async function sendMessage() {
+				const userMessage = userInput.value;
+				if (userMessage.trim() !== '') {
+					displayMessage(`<div class="user-request-container"><div class="user-request"><b>User: </b>${escapeHTML(userMessage)}</div></div>`, 'user');//If error arise remove the div and replace User:
+					const response = await fetch('/get_response', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+						body: `user_input=${encodeURIComponent(userMessage)}`
+					});
+					const responseData = await response.json();
+					displayMessage(responseData.response, 'ai'); // Allow HTML responses to work
+					userInput.value = '';
+				}
+			}
+	
+			function escapeHTML(html) {
+				const div = document.createElement('div');
+				div.textContent = html;
+				return div.innerHTML;
+			}
+	
+			function displayMessage(message, sender) {
+				const messageDiv = document.createElement('div');
+				messageDiv.classList.add(sender);
+				messageDiv.innerHTML = message; // Allow HTML responses to work
+				chatDisplay.appendChild(messageDiv);
+	
+				// Scroll to the bottom after adding a new message
+				scrollToBottom();
+			}
+	
+			function scrollToBottom() {
+				chatDisplay.scrollTop = chatDisplay.scrollHeight;
+			}
+		});
+	</script>
+	<script>
+	  document.addEventListener('DOMContentLoaded', () => {
+	    const moreButton = document.getElementById('more');
+	    const popupContainer = document.getElementById('popup-container');
+	    const closePopupButton = document.getElementById('close-popup');
+		const settingspopup = document.getElementById('settings-popup');
+
+	    moreButton.addEventListener('click', () => {
+	      // Toggle the pop-up by changing its left position
+	      if (popupContainer.style.left === '0px') {
+	        popupContainer.style.left = '-300px';
+	      } else {
+	        popupContainer.style.left = '0px';
+	      }
+	    });
+
+	    closePopupButton.addEventListener('click', () => {
+	      // Close the pop-up when the close button is clicked
+	      popupContainer.style.left = '-300px';
+		  settingspopup.style.left = '-300px';
+	    });
+	  });
+	</script>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+		  const settingsButton = document.getElementById('settings');
+		  const settingsPopup = document.getElementById('settings-popup');
+	  
+		  settingsButton.addEventListener('click', () => {
+			// Calculate the top position for the settings pop-up
+			const topPosition = settingsButton.Top + 100;
+	  
+			// Set the calculated top position for the settings pop-up
+			settingsPopup.style.top = topPosition + 'px';
+	  
+			// Toggle the settings pop-up by changing its right position
+			if (settingsPopup.style.left === '0px') {
+			  settingsPopup.style.left = '-300px';
+			} else {
+			  settingsPopup.style.left = '0px';
+			}
+		  });
+		});
+	  </script>
+	  
+
+	
+  
+</head>
+<body class="light-mode">
+<div class="watermark" style="color:grey;">Lina</div>
+<header class="light-header">
+	<div class="more-container">
+	<div id="more" class="more">
+		<span></span>
+		<span></span>
+		<span></span>
+	</div>
+	</div>
+    <b>Lina(AI)</b>
+</header>
+<div class="chat-container">
+    <div id="chat-display" class="chat-display">
+	</div>
+</div>
+<footer class="light-footer">
+    <input id="user-input" type="text" placeholder="Type your message here">
+    <button id="send-btn">Send</button>
+</footer>
+
+<div id="popup-container" class="popup-container">
+    <!-- Content for the pop-up goes here -->
+    <!-- You can add close button or any other content you want -->
+    <button id="close-popup">Close</button>
+	<button onclick="location.reload()">+ New Chat</button>
+	<div class="button-container">
+		<div id="settings-popup" class="popup-container settings-popup">
+			<button id="toggle-btn">Switch Theme</button>
+			<button id="feedback">Feedback</button>
+			<button class="last-btn" id="about">About Lina</button>
+		</div>
+	</div>
+	<button id="settings">Settings</button>
+	<button id="user-account" class="user-account">Guest</button>
+	V-1.1.0 <br><br>
+</div>
+<script>
+	const account = document.getElementById('user-account');
+
+	// Check if the user's name is already stored in the localStorage
+	const storedName = localStorage.getItem("name");
+
+	// Set the initial text based on whether a name is stored
+	if (storedName) {
+	    account.textContent = storedName;
+	} else {
+	    account.textContent = "Guest";
+	}
+
+	account.addEventListener('click', () => {
+	    if (account.textContent.includes('Guest')) {
+	        const userName = window.prompt('Please enter your name:');
+	        if (userName !== null) {
+	            // Check if the user entered a name and update the text accordingly
+	            account.textContent = userName;
+
+	            // Store the user's name in localStorage
+	            localStorage.setItem("name", userName);
+	        }
+	    } else {
+	        const userName = window.prompt('Enter new name: ');
+	        if (userName !== null) {
+	            account.textContent = userName;
+
+	            // Update the stored name in localStorage
+	            localStorage.setItem("name", userName);
+	        }
+	    }
+	});
+</script>
+
+<!-- <script>//JS for checking online or offline and allow or diallow input
+	const user_input = document.getElementById('user-input');
+	const send_btn = document.getElementById('send-btn');
+
+	function offline(){
+		user_input.disabled = true;
+		send_btn.disabled = true;
+		user_input.textContent = "";
+	}
+	function online(){
+		send_btn.disabled = false;
+		user_input.disabled = false;
+	}
+
+	// Check online/offline status when the page loads
+	if (!navigator.onLine) {
+            offline();
+        }
+
+	// Add event listeners to check online/offline status
+	window.addEventListener('online', online);
+    window.addEventListener('offline', offline);
+
+</script> -->
+
+<script> //JS for Dark Mode and Light Mode and other settings pop up button task
+	const toggleButton = document.getElementById('toggle-btn');
+	const header = document.querySelector('header');
+	const body = document.body;
+	const footer = document.querySelector('footer');
+	const feedback = document.getElementById('feedback');
+	const about = document.getElementById('about');
+
+	// Function to toggle the mode
+	function toggleMode() {
+	    if (body.classList.contains('light-mode')) {
+	        body.classList.remove('light-mode');
+	        body.classList.add('dark-mode');
+	        header.classList.remove('light-header');
+	        header.classList.add('dark-header');
+	        footer.classList.remove('light-footer');
+	        footer.classList.add('dark-footer');
+	        localStorage.setItem("theme", "dark");
+	    } else {
+	        body.classList.remove('dark-mode');
+	        body.classList.add('light-mode');
+	        header.classList.remove('dark-header');
+	        header.classList.add('light-header');
+	        footer.classList.remove('dark-footer');
+	        footer.classList.add('light-footer');
+	        localStorage.setItem("theme", "light");
+	    }
+	}
+
+	// Check local storage for user preference
+	if (localStorage.getItem("theme") === "dark") {
+	    toggleMode(); // Apply the saved theme
+	}
+
+	toggleButton.addEventListener('click', toggleMode);
+
+	feedback.addEventListener('click', () => {
+	    window.location.href = "/feedback/";
+	});
+
+	about.addEventListener('click', () =>{
+		window.location.href = '/about/';
+	});
+</script>
+<!-- Copyright © MrLwitwma
+	This Praogram is free to use
+	You are allowed to use this program for personal use but you are not allowed to sell this program to anyone!
+-->
+</body>
+</html>
