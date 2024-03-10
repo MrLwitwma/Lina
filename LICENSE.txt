@@ -16,4 +16,4 @@ This software is provided under the following terms:
 
 By using this software, you agree to abide by these terms.
 
-MrLwitwma reserves all rights not expressly granted herein.
+MrLwitwma reserves all rights not expressly granted herein, including the right to use the software for commercial purposes.
