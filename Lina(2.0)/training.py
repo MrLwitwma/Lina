@@ -108,7 +108,7 @@ def lina_response2(input):
 
  #Lina Can find factorial
 def factorial(input):
-    input = int(input.replace("what is", "").replace("find out","").replace("!","").replace("factorial","").replace("of","").replace("!",""))
+    input = filter_input(input, type='number')
     if input == 0:
         return "The Value of factorial of 0 or 0! is 1"
     elif input>1500:
