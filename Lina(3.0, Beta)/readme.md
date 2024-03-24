@@ -42,6 +42,7 @@ The source code for Lina can be found on GitHub: https://github.com/mrlwitwma/li
 ## Show Support
 Support MrLwitwma by:
 - Donating to him
+  - https://donate.mrlwitwma.in (Site may be down or not working sometimes)
 - Subscribing/following his social media accounts:
   - YouTube: https://youtube.com/@mrlwitwma
   - Instagram: https://instagram.com/mrlwitwma
@@ -53,3 +54,6 @@ This software is free to use. You can share the main file on GitHub with your fr
 
 ## Disclaimer
 Lina does not have the ability to respond to answers based on previous texts.
+
+## Creator's Message
+It is a Small Language Model so it is mostly inaccurate. Lina's Larger and more accurate model is currently under work, I am currently gathering more data for it to feed and also it takes a lot of time to train model with a CPU. Please considering Donating or Subscribing/Following my Social Media.
