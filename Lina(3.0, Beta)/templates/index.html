@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/lina.svg" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap">
+    <title>Lina(AI)</title>
+    <meta property="og:title" content="Chat With Lina(AI)">
+    <meta property="og:description" content="Lina is a chatbot model made to help users in their tasks.">
+    <meta property="og:image" content="/static/lina.svg?v=1">
+    <meta property="og:url" content="https://MrLwitwma.pythonanywhere.com">
+    <!-- White, Grey , Green-->
+    <!-- Black, grey , white -->
+    <!-- Black White Green!!! -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="dark-body">
+    <div class="watermark" style="color:grey;">Lina</div>
+    <header class="dark-header">
+        <img src="static/lina.svg" style="opacity: 0; width: 0; z-index: 100;" alt="Lina">
+        <div id="more">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <h1>Lina</h1>
+        <img id="new-chat" style="height: 50%; margin-left: auto; margin-right: 20px; cursor: pointer; z-index: 1;" src="/static/new-chat.svg" alt="">
+    </header>
+    <div id="settings-popup">
+        <div style="display: flex;text-decoration: underline; user-select: none;">
+            Settings
+            <div id="exit">
+                <svg width="45" height="45" viewBox="0 0 45 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.2216 0.363635L22.4091 14.7386L29.8523 0.363635H43.858L31.6705 22.1818L44.3125 44H30.4205L22.4091 29.5114L14.5966 44H0.505682L13.1761 22.1818L1.13068 0.363635H15.2216Z" fill="white"/>
+                </svg>                
+            </div>
+        </div>
+        <div class="items">
+            Dark Mode
+            <div id="toggle" class="button">
+                <div id="circle" class="circle"></div>
+            </div>
+        </div>
+        <div class="items">
+            Generative Mode
+            <div class="button" id="toggle-generative">
+                <div id="circle2" class="circle"></div>
+            </div>
+        </div>
+        <div class="items">
+            Store Data
+            <div class="button" id="toggle-data">
+                <div id="circle3" class="circle"></div>
+            </div>
+        </div>
+        <p style="color: grey;
+        font-size: 12px;
+        line-height: 1.2;">Allow your chats to be stored in our system for better response and to improvement our model (Get Lina Premium to modify this settings)</p>
+    </div>
+
+    <div id="terms">
+        <h4>Terms, Conditions and Cookies</h4>
+        <ul>
+            <li>Your Chat datas are being stored in our system for improving the model.</li>
+            <li>This website uses cookies to keep track of users Visiting the Website.</li>
+            <li>Resposes by Lina can be inaccurate! We don't take any responsibility of its wrong responses!</li>
+        </ul>
+        <div>
+            <button id="accept-terms" autofocus>Accept</button>
+        </div>
+    </div>
+
+    <div class="chat-container">
+        <div id="chat"></div>
+        <noscript>This Side Need to use JavaScript to work!</noscript>
+    </div>
+    <div id="popup">
+        <button id="close">Close</button>
+        <button id="clear">Clear Chats</button>
+        <div id="chats-data">
+            <div style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            color: black;" >Your Chats Will be Stored Here!</div>
+        </div>
+        <button id="settings">Settings</button>
+        <span class="version" onclick="window.location.href='/updates'">Version:3.0 (15/07/2024)</span>
+    </div>
+    <div id="showChange"></div>
+    <footer class="light-footer">
+        <div>
+            <textarea placeholder="Message Lina..." type="text" id="user-input" autofocus></textarea>
+            <input id="send" type="submit" value="Send">
+        </div>
+        <!-- <input id="send" type="submit" value="Send"> -->
+    </footer>
+    <script>
+        const toggleKey = document.getElementById('toggle');
+        const toggleForData = document.getElementById('toggle-data');
+        const toggleForGeneration = document.getElementById('toggle-generative');
+        const circle3 = document.getElementById('circle3');
+        const circle2 = document.getElementById('circle2');
+        const circle = document.getElementById('circle');
+        const body = document.body;
+        const header = document.querySelector('header')
+
+
+        function showText(text){;
+            const displayDiv = document.getElementById('showChange')
+            displayDiv.style.opacity = '1'
+            displayDiv.textContent = text;
+            setTimeout(function(){
+                displayDiv.style.opacity = '0';
+            }, 800) 
+        }
+
+        // Check if dark mode preference is stored
+        const storedGenrativeMode = localStorage.getItem('generativeMode');
+        let generative = storedGenrativeMode ? JSON.parse(storedGenrativeMode) : true;
+
+        function toggleGenerative(generative){
+            if (!generative) {
+                circle2.style.translate = '0%';
+                toggleForGeneration.style.background = 'white';
+                circle2.style.background = 'black';
+            } else {
+                circle2.style.translate = '100%';
+                toggleForGeneration.style.background = 'black';
+                circle2.style.background = 'white';
+              }
+        };
+
+        // Event listener to toggle dark mode
+        toggleForGeneration.addEventListener('click', () => {
+          generative = !generative; // Toggle the darkMode variable
+          toggleGenerative(generative); // Apply the changes immediately
+          if (!generative){
+            showText('Generative Mode Disabled')
+          } else{
+            showText('Generative Mode Enabled')
+          }
+          localStorage.setItem('generativeMode', JSON.stringify(generative)); // Store the preference
+        });
+
+
+        // Check if dark mode preference is stored
+        const storedDarkMode = localStorage.getItem('darkMode');
+        let darkMode = storedDarkMode ? JSON.parse(storedDarkMode) : false;
+
+        // Function to apply dark mode based on the stored value
+        function applyDarkMode() {
+          if (darkMode) {
+            circle.style.translate = '0%';
+            toggleKey.style.background = 'white';
+            circle.style.background = 'black';
+            body.classList.remove('dark-body');
+            body.classList.add('light-body');
+            header.classList.remove('dark-header');
+            header.classList.add('light-header');
+          } else {
+            circle.style.translate = '100%';
+            toggleKey.style.background = 'black';
+            circle.style.background = 'white';
+            body.classList.remove('light-body');
+            body.classList.add('dark-body')
+            header.classList.remove('light-header');
+            header.classList.add('dark-header');
+          }
+        }
+
+        // Event listener to toggle dark mode
+        toggleKey.addEventListener('click', () => {
+          darkMode = !darkMode; // Toggle the darkMode variable
+          applyDarkMode(); // Apply the changes immediately
+          if (darkMode){
+            showText('Dark Mode Disabled');
+          } else{
+            showText('Dark Mode Enabled');
+          }
+          localStorage.setItem('darkMode', JSON.stringify(darkMode)); // Store the preference
+        });
+
+        // Toggle For Sharing Data
+        toggleForData.addEventListener('click', ()=>{
+            window.alert('You Need Lina Premium to modify this setting')
+        })
+
+        // Apply dark mode on initial load
+        applyDarkMode();
+        toggleGenerative(generative);
+    </script>
+    <script>
+        const settings = document.getElementById('settings');
+        const settingsPopup = document.getElementById('settings-popup');
+        const exitPopup = document.getElementById('exit');
+
+        settings.addEventListener('click', () => {
+            settingsPopup.style.visibility = 'visible';
+            settingsPopup.style.opacity = '1';
+        });
+
+        exitPopup.addEventListener('click', () => {
+            settingsPopup.style.opacity = '0';
+            setTimeout(() => {
+                settingsPopup.style.visibility = 'hidden';
+            }, 500);
+        });
+
+        document.addEventListener('keydown', function(event) {
+          if (event.key === 'Escape') {
+            settingsPopup.style.opacity = '0';
+            setTimeout(() => {
+                settingsPopup.style.visibility = 'hidden';
+            }, 500);
+          }
+        });
+    </script>
+    <script>
+        // JavaScript  to handle the more popup function
+        const more = document.getElementById('more');
+        const popup = document.getElementById('popup');
+        const close_popup = document.getElementById('close');
+        const NewChat = document.getElementById('new-chat')
+
+        more.addEventListener('click', function() {
+          togglePopupDisplay();
+        });
+
+
+        // Function to focus on textarea when Shift + F is pressed
+        function focusOnTextarea(event) {
+            // Check if the key combination is Shift + F (case insensitive)
+            
+        }
+
+        // Event listener to listen for keydown events
+        document.addEventListener('keydown', focusOnTextarea);
+
+
+        document.addEventListener('keydown', function(event) {
+          if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'm') {
+            togglePopupDisplay();
+          } else if ((event.ctrlKey || event.metaKey) && (event.key === '`' || event.key === '~')) {
+            document.getElementById('chat').textContent = ''
+          } else if (event.shiftKey && (event.key === 'F' || event.key === 'f')) {
+                // Focus on the textarea
+                event.preventDefault();
+                document.getElementById('user-input').focus();
+          }
+        });
+        NewChat.addEventListener('click', ()=>{
+            document.getElementById('chat').textContent = ''
+        })
+
+        close_popup.addEventListener('click', () =>{
+            togglePopupDisplay()
+        });
+
+        let pop_showed = false
+        function togglePopupDisplay() {
+          var popup = document.getElementById('popup');
+          if (pop_showed === true) {
+            popup.style.left = '-300px'
+            pop_showed = false
+          } else {
+            popup.style.display = 'flex'
+            popup.style.left = '0px'
+            pop_showed = true
+          }
+        }
+    </script>
+    <script>
+        // Handle Pop Up Buttons functions
+        document.getElementById('clear').addEventListener('click', function () {
+        const chatsDiv = document.getElementById('chat');
+
+        // Apply fade-out animation to each child element
+        chatsDiv.childNodes.forEach(function (child) {
+            if (child.nodeType === 1) { // Check if it's an element node
+                child.style.opacity = 0;
+            }
+        });
+
+        // Remove all child elements after the fade-out animation
+        setTimeout(function () {
+            while (chatsDiv.firstChild) {
+                chatsDiv.removeChild(chatsDiv.firstChild);
+            }
+        }, 500); // 500ms matches the duration of the transition
+    });
+    </script>
+    <script>
+        // JS for Showing or Hidding Terms, conditions and Cookies
+        document.addEventListener('DOMContentLoaded',()=>{
+            const terms = document.getElementById('terms');
+            const termsAccept = document.getElementById('accept-terms');
+
+            const termsRead = localStorage.getItem('showTerm');
+            let showTerm = termsRead ? JSON.parse(termsRead) : true;
+            
+            if (showTerm === true){
+                terms.style.display = 'flex';
+                document.getElementById('user-input').disabled = true;
+            }
+
+            termsAccept.addEventListener('click', () => {
+              showTerm = !showTerm; // Making sure to not show terms later!
+              terms.style.display = 'none';
+              document.getElementById('user-input').disabled = false;
+              localStorage.setItem('showTerm', JSON.stringify(showTerm)); // Store the preference
+            });
+        });
+    </script>
+    <script src="../static/fetch-data.js"></script>
+    <script src="../static/script.js"></script>
+</body>
+</html>
