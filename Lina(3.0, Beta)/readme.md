@@ -18,7 +18,7 @@ Lina 3.0 is a text generating model designed to generate text and answer user qu
 ## Fixes (From Previous Version)
 - None reported
 
-##How to use 
+## How to use 
 Run the file named 'lina.py' and then go to http://127.0.0.1:5000/ now you can use Lina
 
 ## Usage
