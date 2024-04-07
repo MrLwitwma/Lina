@@ -11,7 +11,7 @@ def generate_response(input_text):
         return random.choice(responses[input_text])
     else:
         try:
-            page_summary = wikipedia.summary(input_text, sentence=1)
+            page_summary = wikipedia.summary(input_text)
             return f"I'm sorry, I don't have that information, but here's what I found: {page_summary}"
         except wikipedia.exceptions.DisambiguationError as e:
             # Handle disambiguation errors, where Wikipedia is unsure of the topic
