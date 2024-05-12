@@ -1,0 +1,14 @@
+Original Owner/ Creator: MrLwitwma
+Model: Lina(2.1)
+This software is provided under the following terms:
+
+1. Free to Use: You are free to use this software for personal or educational purposes. Commercial use is prohibited.
+2. Sharing: You may share the main file of this software on platforms like GitHub with others for non-commercial purposes.
+3. Prohibited Actions: It is forbidden to steal or sell this software or claim it as your own creation.
+4. Attribution: If you use this software, you must mention the model and creator as follows: Lina(2.1) by MrLwitwma
+5. Video Usage: If you use this model in videos, please ensure to provide attribution as mentioned above.
+6. Enforcement: Violations of these terms may result in strict actions being taken.
+
+By using this software, you agree to abide by these terms.
+
+MrLwitwma reserves all rights not expressly granted herein, including the right to use the software for commercial purposes.
